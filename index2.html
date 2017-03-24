@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>留言板</title>
+	<style type="text/css">
+	*{
+		padding: 0;
+		margin: 0;
+	}
+		ul,li{
+			list-style: none;
+		}
+		.btn{
+			padding: 3px 20px;
+			border-radius: 5px;
+			border: 2px solid #4374cf;
+			color: #4374cf; 
+			text-decoration: none;
+		}
+		.title{
+			color: #4374cf;
+			font-size: 30px;
+			margin-bottom: 30px;
+		}
+		.m-input{
+			height: 30px;
+		}
+		.word{
+			color: #fff;
+			background: #00c4ff;
+			font-weight: 200;
+			border-radius: 3px;
+			padding: 5px 30px;
+		}
+		.word-box{
+			margin-top: 30px;
+		}
+		.word-box li{
+			margin: 20px;
+		}
+	</style>
+	<script type="text/javascript" src="vue.js"></script>
+</head>
+<body>
+	<div id="board" style="text-align: center;">
+		<div class="title">{{title}}</div>
+		<div>
+			<input class="m-input" type="text"  v-model="newItem" @keyup.enter='addItem'>
+			<a href="javascript:;" @click="addItem" class="btn">{{btn}}</a>
+		</div>
+		
+		<ul class="word-box">
+			<li is="todo-item" v-for="(item,index) in items"  :label="items[index].label" :btn-clear="btnClear" @remove="removeItem(index)">
+				
+			</li>
+		</ul>
+	</div>
+</body>
+<script type="text/javascript">
+Vue.component('todo-item',{
+		template:`
+		<li>
+			<span class="word">{{label}}</span>
+			<a href="javascript:;" @click="$emit('remove')">{{btnClear}}</a>
+		</li>
+		`,
+		props:['label','btnClear']
+	})
+
+
+	new Vue({
+		el:'#board',
+		data:{
+			title:"留言板",
+			btn:"留言",
+			btnClear:"删除",
+			items:[],
+			newItem:''
+		},
+		methods:{
+			addItem:function(){
+				if (this.newItem!="") {
+					this.items.push({
+						label:this.newItem
+					})
+					this.newItem = "";
+				}
+			},
+			removeItem:function(index){
+				this.items.splice(index,1)
+			}
+		}
+	})
+</script>
+</html>
